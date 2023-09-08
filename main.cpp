@@ -1,76 +1,79 @@
-﻿#include <iostream> // CIA YRA PAGRINDINIS FAILAS
-#include <fstream>
-#include <vector>
-#include <windows.h>
-#include <string>
-#include <vector>
-#include <string.h>
-int File_To_Vector(std::vector <std::string>& vect1, std::string filename);
-void viewTasks(std::vector <std::string>& vect1);
-int Vector_To_File(std::vector <std::string>& vect1, std::string filename);
-void Create_File(std::vector <std::string>& vect1);
-int Check_Vector_Size(std::vector <std::string>& vect1);
-void Make_Task(std::vector <std::string>& vect1);
-std::string FILE_NAME = "tasks_file.txt";
+#include "Header.h"
+
+std::string FILE_NAME = "tasks.txt"; // sita name proffesional padaryt
+void ignoreLine();
+class Textbook // imest i .cpp faila
+{
+public:    
+    int File_To_Vector();
+    void Create_File();
+    int Check_Vector_Size();
+    void Create_Task();
+    void viewTasks();
+    int Vector_To_File();
+    void taskEmpty();
+private:
+    std::vector <std::string> vect_task;
+};
 
 int main() {
 
-    std::vector <std::string> vect_task;
+    Textbook textbook;
 
-    if (File_To_Vector(vect_task, FILE_NAME)) // jeigu failo nera
+    if (textbook.File_To_Vector()) // Return 1 - File not created
     {
-        Create_File(vect_task);
+        textbook.Create_File();
     }
 
-    if (Check_Vector_Size(vect_task)) // jeigu vektorius yra tuscias
+    if (textbook.Check_Vector_Size()) // Return 1 - Vector Empty 
     {
         std::cout << "Type in your first task: ";
-        Make_Task(vect_task);
+        textbook.Create_Task();
     }
 
-    viewTasks(vect_task);
+    textbook.viewTasks();
 
-    Vector_To_File(vect_task, FILE_NAME);
-
+    textbook.Vector_To_File();
 
     return 0;
 }
-int File_To_Vector(std::vector <std::string>& vect1, std::string filename) {
+int Textbook::File_To_Vector() {
     std::string tmpStr;
     std::ifstream file;
-    file.open(filename);
+    file.open(FILE_NAME);
     if (!file.is_open()) {
         return 1;
     }
 
     while (getline(file, tmpStr)) {
-        vect1.push_back(tmpStr);
+        vect_task.push_back(tmpStr);
     }
     file.close();
     return 0;
 }
-void viewTasks(std::vector <std::string>& vect1) {
+void Textbook::viewTasks() {
     int cursorPosY = 0;
     bool loop = true;
-    int j;
-    std::string textas;
-    std::string new_task;
+    std::string update_task;
+    int j{};
 
     while (loop)
     {
-        int size = vect1.size();
-        if (GetAsyncKeyState('S') & 1)
+    Beggining:
+        taskEmpty();
+        int size = vect_task.size();
+        if (GetAsyncKeyState(VK_DOWN) & 1)
             cursorPosY++;
-        if (GetAsyncKeyState('W') & 1)
+        if (GetAsyncKeyState(VK_UP) & 1)
             cursorPosY--;
-        if (GetAsyncKeyState('X') & 1)
+        if (GetAsyncKeyState(VK_ESCAPE) & 1)
             break;
         for (int i = 0; i < size; i++)
         {
             if (i == 0) {
                 std::cout << "Tasks: " << std::endl << std::endl;
             }
-            std::cout << vect1[i];
+            std::cout << vect_task[i];
             if (cursorPosY < 0)
             {
                 cursorPosY = 0;
@@ -87,32 +90,59 @@ void viewTasks(std::vector <std::string>& vect1) {
             }
 
             std::cout << std::endl;
-            if (i == vect1.size() - 1) {
+            if (i == size - 1) {
                 std::cout << std::endl;
-                std::cout << "[X] Exit the program" << std::endl;
-                std::cout << "[G] Select task" << std::endl;
-                std::cout << "[Q] Add a new task" << std::endl;
-                std::cout << "[Z] Save changes" << std::endl;
+                std::cout << "[ESC] Exit the program" << std::endl;
+                std::cout << "[F1] Select task" << std::endl;
+                std::cout << "[F3] Add a new task" << std::endl;
+                std::cout << "[F5] Save changes" << std::endl;
 
             }
-            if (GetAsyncKeyState('G') & 1)
-            {
+            if (GetAsyncKeyState(VK_F1) & 1)
+            { 
                 system("cls");
-                int n;
-                std::cout << "Task: " << vect1[j] << std::endl;
+                std::cout << "Task: " << vect_task[j] << std::endl;
                 std::cout << "What do you want to do with this task?\n";
                 std::cout << "[1] Delete the task \n[2] Change description of the task \n[3] Go back\n[4] End the program\n";
-                std::cin >> n;
+                std::cout << "Your choice: ";
+                int n{};
+                do
+                {
+                    std::cin >> n;
+                    if (!std::cin) // If the previous extraction failed
+                    {
+                        // Handle the failure
+                        std::cin.clear(); // Put back into 'normal' operation mode
+                        ignoreLine();     // Remove the bad input
+                    }
+                } while (n < 1 || n > 4);
+                std::cout << "\b";
                 switch (n)
                 {
-                case 1:
-                    vect1.erase(vect1.begin() + j);
+                case 1:   
+                    if (!vect_task.empty())
+                    {
+                        vect_task.erase(vect_task.begin() + j);
+                    }
+                    else
+                    {
+                        Create_Task();
+                    }                       
+                    system("CLS");
+                    goto Beggining;
                     break;
                 case 2:
                     std::cout << "Type text: ";
-                    std::cin >> textas;
-                    vect1[j] = textas;
-                    Sleep(1000);
+                    update_task.clear();
+                    ignoreLine();
+                    if (std::getline(std::cin, update_task))
+                    {
+                        vect_task[j] = update_task;
+                    }
+                    else
+                    {
+                        std::cerr << "Error reading the input";
+                    }
                     break;
                 case 3:
                     system("cls");
@@ -127,54 +157,73 @@ void viewTasks(std::vector <std::string>& vect1) {
                 }
 
             }
-            if (GetAsyncKeyState('Q') & 1) { // sukurti new task
+            if (GetAsyncKeyState(VK_F3) & 1) { // Create a new task
+                system("CLS");
                 std::cout << "Type in your task: ";
-                Make_Task(vect1);
+                Create_Task();
             }
-            if (GetAsyncKeyState('Z') & 1) { // save changes
-                Vector_To_File(vect1, ::FILE_NAME);
+            if (GetAsyncKeyState(VK_F5) & 1) { // Save the changes
+                Vector_To_File();
             }
         }
         Sleep(200);
         system("CLS");
-
     }
 }
-int Vector_To_File(std::vector <std::string>& vect1, std::string filename) {
+int Textbook::Vector_To_File() {
     std::ofstream file;
     int rasyti = 0;
     std::string tmpStr;
 
-    file.open(filename);
+    file.open(::FILE_NAME);
 
-    if (!file.is_open()) { // jeigu failo nera returninam true
-        std::cout << "ERORR OPENING FILE!";
+    if (!file.is_open()) //  Return 1 - if the file isnt open
+    {
+        std::cout << "ERROR OPENING FILE!";
         Sleep(500);
         return 1;
     }
-    for (int i = 0; i < vect1.size(); i++) // jeigu failas yra tai vektoriaus duomenis pervedame i faila
+    else
     {
-        file << vect1[i] << std::endl;
+        for (int i = 0; i < vect_task.size(); i++) // Write changes to the file
+            // 
+        {
+            file << vect_task[i] << std::endl;
+        }
     }
-
     file.close();
     return 0;
 }
 
-void Create_File(std::vector <std::string>& vect1) { // sukuriame faila
+void Textbook::Create_File() // Create a file
+{
     std::ofstream MyFile(::FILE_NAME);
 }
-int Check_Vector_Size(std::vector <std::string>& vect1)
+int Textbook::Check_Vector_Size()
 {
-    if (vect1.size() == 0)
+    if (vect_task.empty())
     {
-        return 1;  // jeigu vektorius tuscias return 1 (true)
+        return 1; // Return 1 if Vector is empty
     }
     return 0;
 }
-void Make_Task(std::vector <std::string>& vect1) // sukurti task
+void Textbook::Create_Task() // Create a new task
 {
     std::string task;
     std::getline(std::cin, task);
-    vect1.push_back(task);
+    vect_task.push_back(task);
+}
+void Textbook::taskEmpty()
+{
+    for (int i = 0; i < vect_task.size(); ++i)
+    {
+        if (vect_task.at(i).empty())
+        {
+            vect_task.erase(vect_task.begin() + i);
+        }
+    }
+}
+void ignoreLine()
+{
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
