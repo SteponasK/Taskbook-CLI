@@ -54,7 +54,7 @@ git clone https://github.com/SteponasK/Taskbook-CLI.git
 	 * Changed code structure (added classes)
 	 * Separate .cpp and .h files
     * Various bug fixes
-    * See [commit history]((https://github.com/SteponasK/Taskbook-CLI/commits/))
+    * See [commit history](https://github.com/SteponasK/Taskbook-CLI/commits/)
 * 0.1
     * [Initial Commit](https://github.com/SteponasK/Taskbook-CLI/commit/3ce00589e56b14383648c3b75b53f4b3f9e595f7#diff-608d8de3fba954c50110b6d7386988f27295de845e9d7174e40095ba5efcf1bb)
 
