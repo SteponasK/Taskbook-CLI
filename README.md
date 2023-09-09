@@ -3,7 +3,7 @@
 A CLI program designed for task management to help you remember your tasks.
 
 ## Description
-![photo1.png]("README_resources/photo1.png")
+![photo1.png](README_resources/photo1.png)
 Taskbook is a simple and easy-to-use task management CLI application. You can type in your tasks, delete them when you're done, or change their names as needed. It retains a record of all the tasks you've entered that are active. Taskbook simplifies task management and helps you stay organized.
 
 ## Getting Started
@@ -31,14 +31,14 @@ git clone https://github.com/SteponasK/Taskbook-CLI.git
 * [F3] Add a new task
 * [F5] Save changes
 
-![photo1.png]("README_resources/photo1.png")
+![photo1.png](README_resources/photo1.png)
 ### Task Selected:
 * [1] Delete the task
 * [2] Change description of the task
 * [3] Go back (to the __Main menu__)
 * [4] End (__close__) the program
 
-![photo2.png]("README_resources/photo2.png")
+![photo2.png](README_resources/photo2.png)
 
 
 
