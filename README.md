@@ -4,7 +4,7 @@ A CLI program designed for task management to help you remember your tasks.
 
 ## Description
 ![photo1.png](README_resources/photo1.png)
-Taskbook is a simple and easy-to-use task management CLI application. You can type in your tasks, delete them when you're done, or change their names as needed. It retains a record of all the tasks you've entered that are active. Taskbook simplifies task management and helps you stay organized.
+- Taskbook is a simple and easy-to-use task management CLI application. You can type in your tasks, delete them when you're done, or change their names as needed. It retains a record of all the tasks you've entered that are active. Taskbook simplifies task management and helps you stay organized.
 
 ## Getting Started
 
