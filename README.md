@@ -14,14 +14,14 @@ A CLI program designed for task management to help you remember your tasks.
 * [F3] Add a new task
 * [F5] Save changes
 
-![photo1.png](README_resources/photo1.png)
+![photo1.png](README-images/photo1.png)
 ### Task Selected:
 * [1] Delete the task
 * [2] Change description of the task
 * [3] Go back (to the __Main menu__)
 * [4] End (__close__) the program
 
-![photo2.png](README_resources/photo2.png)
+![photo2.png](README-images/photo2.png)
 
 ## Getting Started
 
